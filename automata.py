@@ -2,7 +2,7 @@
 
 A class to deal with finite-state automata
 P.-A. Reynier, Feb. 2023
-Algorithms implemented by Marin Decanini Feb. 2024 :
+Algorithms implemented by Marin Feb. 2024 :
     - is_deterministic()
     - is_complete()
     - compute_next()
