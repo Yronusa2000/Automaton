@@ -198,7 +198,7 @@ class Automata:
 
     def is_empty(self):
         """
-        Checks whether the automaton accepts no word. Proceeds by checking
+        Checks whether   the automaton accepts no word. Proceeds by checking
         whether there exists a final state reachable from an initial one.
         :return: True if the language of the automaton is empty, False otherwise
         """
