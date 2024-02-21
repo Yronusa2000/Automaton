@@ -171,15 +171,20 @@ class Automata:
     def accept(self, word):
         """
         :param word: string on the alphabet
-        :return: True if word is accepted, False otw
+        :return: True if word is accepted, False otw.
         """
 
-        # Define the set of final states
+        F = self.final # Define the set of final states
         X = self.ini  # Start with the initial state
 
+        # For epsilon, we simply check that there's at least one final states is an initial one.
+        if word == "":
+            if X.intersection(F): return True
+            else: return False
+        # For other words, we iterate through letters:
         for letter in word:
                 X.update(self.compute_next(X, letter))
-        if X.intersection(self.final):
+        if X.intersection(F):
             return True  # The word is accepted
         else:
             return False  # The word is not accepted
@@ -208,8 +213,8 @@ class Automata:
         whether there exists a final state reachable from an initial one.
         :return: True if the language of the automaton is empty, False otherwise
         """
-        # To be completed
-        return True
+
+        return self.final in self.reachable_states()
 
     def intersection(self, other):
         """

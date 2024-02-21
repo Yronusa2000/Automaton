@@ -40,21 +40,40 @@ def test_isdeterministic():
 
 
 def test_iscomplete():
-    # assert(A.is_complete() == False)
-    # assert(D.is_complete() == True)
+    assert (A.is_complete() == False)
+    assert (D.is_complete() == True)
     return
 
 
 def test_compute_next():
-    X = {1,2}
+    X = {1, 2}
     letter = 'a'
     Y = {1}
-    assert(A.compute_next(X,letter) == Y)
+    assert (A.compute_next(X, letter) == Y)
     letter = 'b'
-    assert(A.compute_next(X,letter) == X)
+    assert (A.compute_next(X, letter) == X)
     return
 
 
 def test_accept():
-    # à compléter
+    assert (A.accept("aaaaaaaab") == True)
+    assert (A.accept("aaaab") == True)
+    assert (A.accept("") == False)
     return
+
+def test_reachable_states():
+    assert ((A.reachable_states() == {0,1,2} ) == True)
+    A.add_state(4)
+    assert(4 in A.reachable_states() == False)
+    return
+
+
+def test_is_empty():
+    assert(A.is_empty() == False)
+    # Automate sans état final:
+    E = Automata(Sigma, states, trans, ini, set())
+    assert (E.is_empty() == True)
+
+
+
+

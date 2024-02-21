@@ -105,8 +105,5 @@ states = {0,1}
 # 7.
 
 print("accepts:")
-print(A)
-print(A.accept("aaaaaaaaaaa"))
+print(A.accept("aa"))
 
-print("tt")
-print(B.reachable_states())
