@@ -40,8 +40,8 @@ def test_isdeterministic():
 
 
 def test_iscomplete():
-    assert (A.is_complete() == False)
-    assert (D.is_complete() == True)
+    assert (A.is_complete(True) == False)
+    assert (D.is_complete(True) == True)
     return
 
 
@@ -61,19 +61,26 @@ def test_accept():
     assert (A.accept("") == False)
     return
 
+
 def test_reachable_states():
-    assert ((A.reachable_states() == {0,1,2} ) == True)
+    assert ((A.reachable_states() == {0, 1, 2}) == True)
     A.add_state(4)
-    assert(4 in A.reachable_states() == False)
+    assert ((4 in A.reachable_states()) == False)
     return
 
 
 def test_is_empty():
-    assert(A.is_empty() == False)
+    print(A.reachable_states())
+    print(A.final)
+
+    assert ( (A.is_empty()) == False)
     # Automate sans état final:
     E = Automata(Sigma, states, trans, ini, set())
-    assert (E.is_empty() == True)
+    assert ( (E.is_empty()) == True)
 
 
-
-
+test_iscomplete()
+test_compute_next()
+test_accept()
+test_reachable_states()
+test_is_empty()

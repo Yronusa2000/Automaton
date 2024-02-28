@@ -1,3 +1,4 @@
+import sample_automata
 import test_automata
 from automata import Automata
 
@@ -75,35 +76,4 @@ Adeter.add_transition(1, "b", "1,2")
 Adeter.add_transition("1,2", "b", "1,2")
 Adeter.add_transition("1,2", "a", 1)
 
-print("Adeter est déterministe: ")
-print(Adeter.is_deterministic(True))
-print("\n")
-
-
-# Si on rajoute des états initiaux:
-Adeter.set_initial(1)
-print("Adeter est déterministe: ")
-print(Adeter.is_deterministic(True))
-print("\n")
-# On retrouve bien un automate non déterministe.
-
-# 4. Adeter est bien complet:
-print("Is Adeter complete :")
-print(Adeter.is_complete(True))
-print("\n")
-
-# A ne l'est pas:
-print("Is A complete :")
-print(A.is_complete(True))
-print("\n")
-
-# 6. Test de "compute_next":
-
-print(A.compute_next({0}, "a"))
-
-states = {0,1}
-# 7.
-
-print("accepts:")
-print(A.accept("aa"))
-
+Adeter.union(B)

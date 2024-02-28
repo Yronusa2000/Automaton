@@ -13,6 +13,8 @@ Algorithms implemented by Marin Feb. 2024 :
 
 import copy
 
+import main
+
 
 class Automata:
     def __init__(self, alphabet, states, trans, ini, final):
@@ -163,7 +165,7 @@ class Automata:
             if source in self.trans:
                 if sigma in self.trans[source]:
                     for s in self.trans[source][sigma]:
-                       res.add(s)
+                        res.add(s)
                         # Add the state reached through sigma
 
         return res
@@ -174,16 +176,18 @@ class Automata:
         :return: True if word is accepted, False otw.
         """
 
-        F = self.final # Define the set of final states
+        F = self.final  # Define the set of final states
         X = self.ini  # Start with the initial state
 
         # For epsilon, we simply check that there's at least one final states is an initial one.
         if word == "":
-            if X.intersection(F): return True
-            else: return False
+            if X.isdisjoint(F):
+                return True
+            else:
+                return False
         # For other words, we iterate through letters:
         for letter in word:
-                X.update(self.compute_next(X, letter))
+            X.update(self.compute_next(X, letter))
         if X.intersection(F):
             return True  # The word is accepted
         else:
@@ -196,15 +200,14 @@ class Automata:
         """
         X = self.ini
         Y = set()
-        while(Y != Y):
+        while (Y != Y):
             Y.update(X)
             for letter in self.alphabet:
                 print("before")
                 print(X)
-                X.update(X+self.compute_next(X, letter))
+                X.update(X + self.compute_next(X, letter))
                 print("after")
                 print(X)
-        # To be completed
         return X
 
     def is_empty(self):
@@ -213,21 +216,93 @@ class Automata:
         whether there exists a final state reachable from an initial one.
         :return: True if the language of the automaton is empty, False otherwise
         """
+        if self.final & self.reachable_states():
+            print()
+            return False
+        else:
+            return True
 
-        return self.final in self.reachable_states()
-
-    def intersection(self, other):
+    def copy(self):
         """
-        :param other: an automaton
-        :return: a new automaton whose language is the intersection
+        :return: A new automaton which is a deep copy of the automaton
         """
-        # To be completed
-        return
+        new_alphabet = self.alphabet.copy()
+        new_states = self.states.copy()
+        new_trans = copy.deepcopy(self.trans)
+        new_ini = self.ini.copy()
+        new_final = self.final.copy()
+        return Automata(new_alphabet, new_states, new_trans, new_ini, new_final)
 
     def union(self, other):
         """
-        :param other: an automaton
-        :return: a new automaton whose language is the union
+        Computes an automaton whose language is the union of
+        two automata defined over the same alphabet.
+        :param other: an instance of the class Automata
+        :return: a new instance of the class Automata
         """
-        # To be completed
         return
+
+    def intersection(self, other):
+        """
+        Computes an automaton whose language is the intersection of
+        two automata defined over the same alphabet. It computes
+        the product of the two automata
+        :param other: an instance of the class Automata
+        :return: a new instance of the class Automata, obtained as the product
+        of the automaton with automaton other
+        """
+        return main.A
+
+    def complement_DFA(self):
+        """
+        Assumes the input automaton is deterministic and complete
+        :return: modifies the automaton to accept the complement language
+        """
+        temp = self.final
+        self.final = self.ini
+        self.ini = temp
+        return
+
+    def check_inclusion_DFA(self, other):
+        """
+        checks whether the language of the automaton is included
+        in that of the other automaton (assumed deterministic and complete)
+        :param other: an automaton which is deterministic and complete
+        :return: True if inclusion holds, False otherwise
+        """
+        complement_other = other.complement_DFA().copy
+        product = self.intersection(complement_other)
+        return product.is_empty()
+
+    def check_equivalence_DFA(self, other):
+        """
+        checks whether the language of the automaton is equal
+        to that of the other automaton.
+        Assumes both automata are deterministic and complete.
+        :param other: an automaton which is deterministic and complete
+        :return: True if equality holds, False otherwise
+        """
+
+        return self.check_inclusion_DFA(other) and other.check_inclusion_DA(self)
+
+    def mirror(self):
+        """
+        Modifies the automaton so that it accepts the mirror
+        image of the language (swaps direction of transitions)
+        :return: None
+        """
+
+
+    def co_reachable_states(self):
+        """
+        :return: set of states that are co-reachable from some final state
+        """
+        copy = self.copy()
+        copy.mirror()
+        return copy.reachable_states()
+
+    def useful_states(self):
+        """
+        :return: set of states that are useful
+        """
+        return self.co_reachable_states().intersection(self.reachable_states())
