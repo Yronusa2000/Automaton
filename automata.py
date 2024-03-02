@@ -10,10 +10,7 @@ Algorithms implemented by Marin Feb. 2024 :
     - compute_next
 
 """
-
 import copy
-
-import main
 
 
 class Automata:
@@ -200,12 +197,12 @@ class Automata:
         """
         X = self.ini
         Y = set()
-        while (Y != Y):
+        while (X != Y):
             Y.update(X)
             for letter in self.alphabet:
                 print("before")
                 print(X)
-                X.update(X + self.compute_next(X, letter))
+                X.update(X.union(self.compute_next(X, letter)))
                 print("after")
                 print(X)
         return X
@@ -235,23 +232,61 @@ class Automata:
 
     def union(self, other):
         """
-        Computes an automaton whose language is the union of
-        two automata defined over the same alphabet.
-        :param other: an instance of the class Automata
-        :return: a new instance of the class Automata
+        :param other: an automaton
+        :return: a new automaton whose language is the union
         """
-        return
+
+        #
+        new_states = {(s, 0) for s in self.states} | {(s, 1) for s in other.states}
+        new_trans = {}
+        for state in new_states:
+            if (not state[1] in self.trans) and (not state[0] in self.trans):
+                new_trans[state] = {label: {s for s in new_states if s[1] == 0 and s[0] in self.trans[state[0]][label]}
+                                    for label in self.trans[state[0]]}
+                # Note: cette optimisation de mon code provient de Paul.
+                # Ma version faisait trois ou quatre fois cette taille-là...
+            else:
+                if (state[1] in other.trans) and (state[0] in other.trans):
+                    new_trans[state] = {
+                        label: {s for s in new_states if s[1] == 1 and s[0] in other.trans[state[0]][label]}
+                        for
+                        label in other.trans[state[0]]}
+
+        new_ini = set()
+        new_final = set()
+
+        for state in new_states:
+            if state[0] in self.ini or state[0] in other.ini:
+                new_ini.add(state)
+        for state in new_states:
+            if state[0] in self.final or state[0] in other.final:
+                new_final.add(state)
+
+        return Automata(self.alphabet, new_states, new_trans, new_ini, new_final)
 
     def intersection(self, other):
         """
-        Computes an automaton whose language is the intersection of
-        two automata defined over the same alphabet. It computes
-        the product of the two automata
-        :param other: an instance of the class Automata
-        :return: a new instance of the class Automata, obtained as the product
-        of the automaton with automaton other
+        Compute the intersection of two automatas.
+
+        :param other: Automata to intersect with
+        :return: New Automata representing the intersection
         """
-        return main.A
+
+        new_alphabet = self.alphabet
+        new_states = {(s1, s2) for s1 in self.states for s2 in other.states}
+        new_trans = {}
+
+        for state_pair in new_states:
+            new_trans[state_pair] = {}
+            for symbol in new_alphabet:
+                transitions_self = self.trans.get(state_pair[0], {}).get(symbol, set())
+                transitions_other = other.trans.get(state_pair[1], {}).get(symbol, set())
+                new_trans[state_pair][symbol] = {(s1, s2) for s1 in transitions_self for s2 in transitions_other}
+
+        new_ini = {(self_ini, other_ini) for self_ini in self.ini for other_ini in other.ini}
+        new_final = {(self_final, other_final) for self_final in self.final for other_final in other.final}
+
+        return Automata(new_alphabet, new_states, new_trans, new_ini, new_final)
 
     def complement_DFA(self):
         """
@@ -292,6 +327,14 @@ class Automata:
         :return: None
         """
 
+        # Invert the transitions
+        mirror_trans = {state: {symbol: set() for symbol in self.alphabet} for state in self.states}
+        for state, transitions in self.trans.items():
+            for symbol, next_states in transitions.items():
+                for next_state in next_states:
+                    mirror_trans[next_state][symbol].add(state)
+
+        return Automata(self.alphabet, self.states, mirror_trans, self.final, self.ini)
 
     def co_reachable_states(self):
         """

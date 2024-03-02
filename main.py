@@ -1,4 +1,3 @@
-import sample_automata
 import test_automata
 from automata import Automata
 

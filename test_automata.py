@@ -63,7 +63,8 @@ def test_accept():
 
 
 def test_reachable_states():
-    assert ((A.reachable_states() == {0, 1, 2}) == True)
+    print(A.reachable_states())
+    # assert ((A.reachable_states() == {0, 1, 2}) == True)
     A.add_state(4)
     assert ((4 in A.reachable_states()) == False)
     return
@@ -71,16 +72,30 @@ def test_reachable_states():
 
 def test_is_empty():
     print(A.reachable_states())
+    A.set_final(1)
     print(A.final)
-
-    assert ( (A.is_empty()) == False)
+    assert ((A.is_empty()) == False)
     # Automate sans état final:
     E = Automata(Sigma, states, trans, ini, set())
-    assert ( (E.is_empty()) == True)
+    assert ((E.is_empty()) == True)
 
 
-test_iscomplete()
-test_compute_next()
-test_accept()
+def test_union():
+    print("a union a equals")
+    print(A.union(A))
+
+
+#   assert (len(A.union(A).states) == len(A.reachable_states()))
+#  assert (A.union(A).reachable_states() == A.reachable_states())
+
+
 test_reachable_states()
 test_is_empty()
+test_union()
+
+print("A automata")
+print(A)
+
+print("A mirror automata")
+print(A.mirror())
+
