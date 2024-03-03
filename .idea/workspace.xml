@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5c1ffd97-dcac-483d-beca-9b0ef68ed2c7" name="Changes" comment="added mirror method">
+    <list default="true" id="5c1ffd97-dcac-483d-beca-9b0ef68ed2c7" name="Changes" comment="added trim method + test methods">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/automata.py" beforeDir="false" afterPath="$PROJECT_DIR$/automata.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_automata.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_automata.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,7 +145,15 @@
       <option name="project" value="LOCAL" />
       <updated>1709386168958</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="added trim method + test methods">
+      <option name="closed" value="true" />
+      <created>1709473763771</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1709473763771</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -154,6 +161,7 @@
     <MESSAGE value="added sources to automata.py" />
     <MESSAGE value="added tests" />
     <MESSAGE value="added mirror method" />
-    <option name="LAST_COMMIT_MESSAGE" value="added mirror method" />
+    <MESSAGE value="added trim method + test methods" />
+    <option name="LAST_COMMIT_MESSAGE" value="added trim method + test methods" />
   </component>
 </project>

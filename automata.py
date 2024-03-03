@@ -246,6 +246,7 @@ class Automata:
             elif state[1] and state[0] in other.trans:
                 new_trans[state] = {label: {s for s in new_states if s[1] == 1 and s[0] in other.trans[state[0]][label]} for
                                     label in other.trans[state[0]]}
+                # Note: cette optimisation du code provient de Paul, ma version était beaucoup plus longue (3 ou 4x).
 
         new_ini = set()
         new_final = set()
