@@ -241,10 +241,12 @@ class Automata:
         new_trans = {}
         for state in new_states:
             if not state[1] and state[0] in self.trans:
-                new_trans[state] = {label: {s for s in new_states if s[1] == 0 and s[0] in self.trans[state[0]][label]} for
+                new_trans[state] = {label: {s for s in new_states if s[1] == 0 and s[0] in self.trans[state[0]][label]}
+                                    for
                                     label in self.trans[state[0]]}
             elif state[1] and state[0] in other.trans:
-                new_trans[state] = {label: {s for s in new_states if s[1] == 1 and s[0] in other.trans[state[0]][label]} for
+                new_trans[state] = {label: {s for s in new_states if s[1] == 1 and s[0] in other.trans[state[0]][label]}
+                                    for
                                     label in other.trans[state[0]]}
                 # Note: cette optimisation du code provient de Paul, ma version était beaucoup plus longue (3 ou 4x).
 
@@ -352,7 +354,9 @@ class Automata:
         # Les nouveaux états sont l'intersection entre les états, et les états utiles.
         new_states = useful.intersection(self.states)
         # De même les transitions sont les transitions entre les états utiles de l'automate.
-        new_trans = {state: {symbol: next_states.intersection(new_states) for symbol, next_states in transitions.items()} for state, transitions in self.trans.items() if state in useful}
+        new_trans = {
+            state: {symbol: next_states.intersection(new_states) for symbol, next_states in transitions.items()} for
+            state, transitions in self.trans.items() if state in useful}
         new_ini = self.ini.intersection(new_states)
         new_final = self.final.intersection(new_states)
 
