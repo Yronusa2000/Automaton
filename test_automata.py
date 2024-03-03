@@ -1,3 +1,4 @@
+import sample_automata
 from automata import Automata
 
 Sigma = {'a', 'b'}
@@ -81,21 +82,36 @@ def test_is_empty():
 
 
 def test_union():
-    print("a union a equals")
-    print(A.union(A))
+    # Au vu de la fonction union, le nouvel automate créé a une structure d'états différente de l'automate de base.
+    # On peut difficilement faire des tests sur les états accessibles etc mais on peut toujours tester sur leur nombre.
+    for B in [sample_automata.B1, sample_automata.B2, sample_automata.B3, sample_automata.B4]:
+        for C in [sample_automata.B1, sample_automata.B2, sample_automata.B3, sample_automata.B4]:
+            assert (len(B.union(C).reachable_states()) <= len(B.reachable_states()) + len(C.reachable_states()))
+            assert (len(B.union(C).ini) <= len(B.ini) + len(C.ini))
 
 
-#   assert (len(A.union(A).states) == len(A.reachable_states()))
-#  assert (A.union(A).reachable_states() == A.reachable_states())
+def test_intersection():
+    for B in [sample_automata.B1, sample_automata.B2, sample_automata.B3, sample_automata.B4]:
+        for C in [sample_automata.B1, sample_automata.B2, sample_automata.B3, sample_automata.B4]:
+            assert (len(B.intersection(C).final) <= len(B.final))
+            assert (len(B.intersection(C).final) <= len(C.final))
+
+
+def test_trim():
+    for B in [sample_automata.B1, sample_automata.B2, sample_automata.B3, sample_automata.B4]:
+        for C in [sample_automata.B1, sample_automata.B2, sample_automata.B3, sample_automata.B4]:
+            assert (len(B.union(C).reachable_states()) >= len(B.reachable_states()) + len(C.reachable_states()))
+            assert (len(B.union(C).ini) >= len(B.ini) + len(C.ini))
+            assert (len(B.union(C).final) >= len(B.final) + len(C.final))
 
 
 test_reachable_states()
 test_is_empty()
 test_union()
+test_intersection()
 
 print("A automata")
 print(A)
 
 print("A mirror automata")
 print(A.mirror())
-

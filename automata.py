@@ -240,17 +240,12 @@ class Automata:
         new_states = {(s, 0) for s in self.states} | {(s, 1) for s in other.states}
         new_trans = {}
         for state in new_states:
-            if (not state[1] in self.trans) and (not state[0] in self.trans):
-                new_trans[state] = {label: {s for s in new_states if s[1] == 0 and s[0] in self.trans[state[0]][label]}
-                                    for label in self.trans[state[0]]}
-                # Note: cette optimisation de mon code provient de Paul.
-                # Ma version faisait trois ou quatre fois cette taille-là...
-            else:
-                if (state[1] in other.trans) and (state[0] in other.trans):
-                    new_trans[state] = {
-                        label: {s for s in new_states if s[1] == 1 and s[0] in other.trans[state[0]][label]}
-                        for
-                        label in other.trans[state[0]]}
+            if not state[1] and state[0] in self.trans:
+                new_trans[state] = {label: {s for s in new_states if s[1] == 0 and s[0] in self.trans[state[0]][label]} for
+                                    label in self.trans[state[0]]}
+            elif state[1] and state[0] in other.trans:
+                new_trans[state] = {label: {s for s in new_states if s[1] == 1 and s[0] in other.trans[state[0]][label]} for
+                                    label in other.trans[state[0]]}
 
         new_ini = set()
         new_final = set()
@@ -349,3 +344,15 @@ class Automata:
         :return: set of states that are useful
         """
         return self.co_reachable_states().intersection(self.reachable_states())
+
+    def trim(self):
+        useful = self.useful_states()
+
+        # Les nouveaux états sont l'intersection entre les états, et les états utiles.
+        new_states = useful.intersection(self.states)
+        # De même les transitions sont les transitions entre les états utiles de l'automate.
+        new_trans = {state: {symbol: next_states.intersection(new_states) for symbol, next_states in transitions.items()} for state, transitions in self.trans.items() if state in useful}
+        new_ini = self.ini.intersection(new_states)
+        new_final = self.final.intersection(new_states)
+
+        return Automata(self.alphabet, new_states, new_trans, new_ini, new_final)
